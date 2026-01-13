@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Float Data Explorer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #14b8a6;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-text: #f1f5f9;
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --light-text: #334155;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: var(--light-card);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .dark-mode .navbar {
+            background-color: var(--dark-card);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .brand-text p {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            background-color: var(--light-bg);
+            width: 250px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .search-bar input {
+            background-color: var(--dark-bg);
+            border-color: #475569;
+            color: var(--dark-text);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .settings-btn {
+            color: var(--dark-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Chat Assistant Panel */
+        .chat-panel {
+            width: 320px;
+            background-color: var(--light-card);
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .dark-mode .chat-panel {
+            background-color: var(--dark-card);
+            border-right-color: #334155;
+        }
+
+        .chat-panel.collapsed {
+            width: 60px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .chat-header {
+            border-bottom-color: #334155;
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .toggle-chat, .clear-chat {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            font-size: 1.125rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .toggle-chat, .dark-mode .clear-chat {
+            color: var(--dark-text);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .assistant-message {
+            align-self: flex-start;
+            background-color: #f1f5f9;
+            color: var(--light-text);
+        }
+
+        .dark-mode .assistant-message {
+            background-color: #334155;
+            color: var(--dark-text);
+        }
+
+        .quick-actions {
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .pill-btn {
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode .pill-btn {
+            background-color: #334155;
+            color: var(--dark-text);
+        }
+
+        .pill-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .dark-mode .pill-btn:hover {
+            background-color: #475569;
+        }
+
+        .sql-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .sql-toggle {
+            border-top-color: #334155;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .chat-input {
+            border-top-color: #334155;
+        }
+
+        .chat-input form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--border-radius);
+            background-color: var(--light-bg);
+            transition: var(--transition);
+        }
+
+        .dark-mode .chat-input input {
+            background-color: var(--dark-bg);
+            border-color: #475569;
+            color: var(--dark-text);
+        }
+
+        .send-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 0.5rem 1rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            animation: typing 1.4s infinite;
+            opacity: 0;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0; }
+            30% { opacity: 1; }
+        }
+
+        /* Map Section */
+        .map-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 500;
+        }
+
+        .map-btn {
+            background-color: var(--light-card);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .dark-mode .map-btn {
+            background-color: var(--dark-card);
+            color: var(--dark-text);
+        }
+
+        .map-legend {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background-color: var(--light-card);
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            box-shadow: var(--shadow);
+            z-index: 500;
+            transition: var(--transition);
+        }
+
+        .dark-mode .map-legend {
+            background-color: var(--dark-card);
+        }
+
+        .legend-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .legend-scale {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 150px;
+            height: 10px;
+            background: linear-gradient(to right, blue, cyan, green, yellow, red);
+            border-radius: 5px;
+        }
+
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Visualization Panel */
+        .viz-panel {
+            width: 400px;
+            background-color: var(--light-card);
+            border-left: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .dark-mode .viz-panel {
+            background-color: var(--dark-card);
+            border-left-color: #334155;
+        }
+
+        .viz-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .viz-header {
+            border-bottom-color: #334155;
+        }
+
+        .viz-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .segmented-control {
+            display: flex;
+            background-color: #f1f5f9;
+            border-radius: var(--border-radius);
+            padding: 0.25rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .segmented-control {
+            background-color: #334155;
+        }
+
+        .segmented-btn {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .segmented-btn.active {
+            background-color: var(--light-card);
+            box-shadow: var(--shadow);
+        }
+
+        .dark-mode .segmented-btn.active {
+            background-color: var(--dark-bg);
+        }
+
+        .styled-dropdown {
+            position: relative;
+        }
+
+        .styled-dropdown select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--border-radius);
+            background-color: var(--light-bg);
+            appearance: none;
+            transition: var(--transition);
+        }
+
+        .dark-mode .styled-dropdown select {
+            background-color: var(--dark-bg);
+            border-color: #475569;
+            color: var(--dark-text);
+        }
+
+        .styled-dropdown:after {
+            content: "▼";
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #64748b;
+        }
+
+        .plot-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .plot-tabs {
+            border-bottom-color: #334155;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .plot-container {
+            flex: 1;
+            padding: 1rem;
+            position: relative;
+        }
+
+        #plot {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loading-skeleton {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+
+        .dark-mode .loading-skeleton {
+            background-color: var(--dark-bg);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.6; }
+        }
+
+        .viz-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .dark-mode .viz-actions {
+            border-top-color: #334155;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--border-radius);
+            background-color: var(--light-bg);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .dark-mode .action-btn {
+            background-color: var(--dark-bg);
+            border-color: #475569;
+            color: var(--dark-text);
+        }
+
+        .action-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .dark-mode .action-btn:hover {
+            background-color: #334155;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .chat-panel, .viz-panel {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .chat-panel, .viz-panel {
+                width: 100%;
+                height: 300px;
+            }
+            
+            .map-section {
+                order: 2;
+                flex: 1;
+            }
+            
+            .chat-panel {
+                order: 1;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .viz-panel {
+                order: 3;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .search-bar input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .navbar-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-bar input {
+                width: 180px;
+            }
+            
+            .chat-panel, .viz-panel {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <div class="logo">FDE</div>
+                <div class="brand-text">
+                    <h1>Float Data Explorer</h1>
+                    <p>Oceanographic Data Visualization</p>
+                </div>
+            </div>
+            <div class="navbar-controls">
+                <div class="search-bar">
+                    <i>🔍</i>
+                    <input type="text" placeholder="Search floats or profiles...">
+                </div>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="settings-btn">⚙️</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Chat Assistant Panel -->
+            <aside class="chat-panel">
+                <div class="chat-header">
+                    <div class="chat-title">Data Assistant</div>
+                    <div class="chat-controls">
+                        <button class="clear-chat" title="Clear Chat">🗑️</button>
+                        <button class="toggle-chat" title="Collapse Panel">◀</button>
+                    </div>
+                </div>
+                <div class="chat-messages">
+                    <div class="message assistant-message">
+                        <p>Hello! I can help you explore float data. What would you like to know?</p>
+                    </div>
+                    <div class="message user-message">
+                        <p>Show me recent floats</p>
+                    </div>
+                    <div class="message assistant-message">
+                        <p>Here are the most recent floats with temperature data plotted below.</p>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <span>Assistant is typing</span>
+                        <span class="typing-dots">
+                            <span>.</span>
+                            <span>.</span>
+                            <span>.</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button class="pill-btn">🌡️ Temperature</button>
+                    <button class="pill-btn">🧭 Profile Plot</button>
+                    <button class="pill-btn">📊 X-Y Plot</button>
+                    <button class="pill-btn">🌊 Salinity</button>
+                </div>
+                <div class="sql-toggle">
+                    <span>SQL Mode</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="chat-input">
+                    <form id="chatForm">
+                        <input type="text" placeholder="Type a message...">
+                        <button type="submit" class="send-btn">Send</button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Map Section -->
+            <section class="map-section">
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button class="map-btn" title="Trajectory Animation">🎬</button>
+                        <button class="map-btn" title="Region Selection">⬜</button>
+                        <button class="map-btn" title="Reset View">🔄</button>
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-title">Temperature (°C)</div>
+                        <div class="legend-scale">
+                            <div class="legend-color"></div>
+                        </div>
+                        <div class="legend-labels">
+                            <span>-2</span>
+                            <span>10</span>
+                            <span>22</span>
+                            <span>34</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Panel -->
+            <aside class="viz-panel">
+                <div class="viz-header">
+                    <h3>Data Visualization</h3>
+                </div>
+                <div class="plot-tabs">
+                    <button class="tab active">Profile Plot</button>
+                    <button class="tab">Time Series</button>
+                    <button class="tab">Comparison</button>
+                </div>
+                <div class="viz-controls">
+                    <div class="control-group">
+                        <label class="control-label">X-Axis</label>
+                        <div class="segmented-control">
+                            <button class="segmented-btn active">Pressure</button>
+                            <button class="segmented-btn">Depth</button>
+                            <button class="segmented-btn">Time</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Y-Axis</label>
+                        <div class="styled-dropdown">
+                            <select>
+                                <option>Temperature</option>
+                                <option>Salinity</option>
+                                <option>Oxygen</option>
+                                <option>Chlorophyll</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">View Mode</label>
+                        <div class="segmented-control">
+                            <button class="segmented-btn active">Lines</button>
+                            <button class="segmented-btn">Scatter</button>
+                            <button class="segmented-btn">Both</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="plot-container">
+                    <div id="plot"></div>
+                    <div class="loading-skeleton" id="plotLoading"></div>
+                </div>
+                <div class="viz-actions">
+                    <button class="action-btn">📥 Export Data</button>
+                    <button class="action-btn">📊 Add Annotation</button>
+                    <button class="action-btn">🔗 Share Plot</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        // Chat Panel Toggle
+        const toggleChat = document.querySelector('.toggle-chat');
+        const chatPanel = document.querySelector('.chat-panel');
+        toggleChat.addEventListener('click', () => {
+            chatPanel.classList.toggle('collapsed');
+            toggleChat.textContent = chatPanel.classList.contains('collapsed') ? '▶' : '◀';
+        });
+
+        // Chat Form Submission
+        const chatForm = document.getElementById('chatForm');
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = chatForm.querySelector('input');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                const messagesContainer = document.querySelector('.chat-messages');
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.innerHTML = `<p>${message}</p>`;
+                messagesContainer.appendChild(userMessage);
+                
+                // Clear input
+                input.value = '';
+                
+                // Show typing indicator
+                typingIndicator.style.display = 'block';
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Simulate assistant response after delay
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    
+                    const assistantMessage = document.createElement('div');
+                    assistantMessage.className = 'message assistant-message';
+                    assistantMessage.innerHTML = `<p>I've processed your request: "${message}". Here are the results.</p>`;
+                    messagesContainer.appendChild(assistantMessage);
+                    
+                    // Scroll to bottom again
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 2000);
+            }
+        });
+
+        // Tab Switching
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show loading skeleton
+                const plotLoading = document.getElementById('plotLoading');
+                plotLoading.style.display = 'block';
+                
+                // Simulate plot loading
+                setTimeout(() => {
+                    plotLoading.style.display = 'none';
+                    updatePlot();
+                }, 1000);
+            });
+        });
+
+        // Segmented Controls
+        const segmentedBtns = document.querySelectorAll('.segmented-btn');
+        segmentedBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parent = btn.parentElement;
+                parent.querySelectorAll('.segmented-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update plot when control changes
+                updatePlot();
+            });
+        });
+
+        // Initialize Map
+        const map = L.map('map').setView([30, -30], 3);
+        
+        // Add tile layer (using a light theme by default)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Add some sample float markers
+        const floatData = [
+            { id: 57265, lat: 49.9, lng: -23.8, date: 'Sep 24, 2023', temp: 12.5 },
+            { id: 57266, lat: 45.2, lng: -25.1, date: 'Sep 23, 2023', temp: 14.2 },
+            { id: 57267, lat: 42.8, lng: -20.5, date: 'Sep 22, 2023', temp: 11.8 },
+            { id: 57268, lat: 38.5, lng: -18.3, date: 'Sep 21, 2023', temp: 16.4 },
+            { id: 57269, lat: 35.2, lng: -22.7, date: 'Sep 20, 2023', temp: 18.9 }
+        ];
+        
+        floatData.forEach(float => {
+            const marker = L.marker([float.lat, float.lng]).addTo(map);
+            marker.bindPopup(`
+                <div>
+                    <strong>Float #${float.id}</strong><br>
+                    Date: ${float.date}<br>
+                    Location: ${float.lat}°N, ${float.lng}°W<br>
+                    Temperature: ${float.temp}°C
+                </div>
+            `);
+        });
+
+        // Initialize Plot
+        function updatePlot() {
+            // Sample data for the plot
+            const pressure = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+            const temperature = [18.5, 18.2, 17.8, 17.2, 16.5, 15.7, 14.8, 13.9, 12.9, 11.8, 10.7];
+            
+            const trace = {
+                x: temperature,
+                y: pressure,
+                mode: 'lines+markers',
+                type: 'scatter',
+                name: 'Temperature Profile',
+                line: { color: '#0ea5e9', width: 3 },
+                marker: { size: 6 }
+            };
+            
+            const layout = {
+                title: 'Temperature vs Pressure',
+                xaxis: { title: 'Temperature (°C)' },
+                yaxis: { title: 'Pressure (dbar)', autorange: 'reversed' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: document.body.classList.contains('dark-mode') ? '#f1f5f9' : '#334155' }
+            };
+            
+            Plotly.newPlot('plot', [trace], layout, { responsive: true });
+        }
+        
+        // Initial plot
+        updatePlot();
+        
+        // Update plot when theme changes
+        themeToggle.addEventListener('click', () => {
+            setTimeout(updatePlot, 100);
+        });
+    </script>
+</body>
+</html>

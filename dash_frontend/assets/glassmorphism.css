@@ -1,0 +1,371 @@
+/* Glassmorphism Styles for FloatChat Dashboard */
+
+/* Base glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Dark mode glass */
+.dark .glass {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dark .glass:hover {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* Top navigation bar */
+.top-nav {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 10px 20px;
+}
+
+.dark .top-nav {
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Pill buttons for navigation */
+.nav-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 8px 16px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+  color: #007bff;
+}
+
+.nav-button.active {
+  background: rgba(0, 123, 255, 0.2);
+  color: #007bff;
+  box-shadow: 0 0 25px rgba(0, 123, 255, 0.6);
+}
+
+.dark .nav-button {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dark .nav-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+  color: #007bff;
+}
+
+.dark .nav-button.active {
+  background: rgba(0, 123, 255, 0.2);
+  color: #007bff;
+}
+
+/* Floating glass cards for panels */
+.panel-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+.panel-card:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.dark .panel-card {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dark .panel-card:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Map controls - floating glass buttons */
+.map-control {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  position: absolute;
+}
+
+.map-control:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.dark .map-control {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark .map-control:hover {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Chart containers */
+.chart-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dark .chart-container {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Theme toggle */
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .theme-toggle {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Gradients for backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(138, 43, 226, 0.1), rgba(0, 255, 255, 0.1));
+}
+
+.dark .gradient-bg {
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.2), rgba(138, 43, 226, 0.2), rgba(0, 255, 255, 0.2));
+}
+
+/* Vertical resize handle */
+.vertical-resize-handle {
+    height: 4px;
+    background: transparent;
+    cursor: row-resize;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.vertical-resize-handle:hover {
+    background: var(--accent-primary);
+    height: 6px;
+    opacity: 0.8;
+}
+
+.vertical-resize-handle::before {
+    content: '⋮⋮';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    color: var(--text-muted);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.vertical-resize-handle:hover::before {
+    opacity: 1;
+}
+
+/* Animation for tab highlight */
+.tab-highlight {
+  animation: highlight 2s ease-in-out;
+}
+
+@keyframes highlight {
+  0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
+/* SF Pro font fallback */
+* {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Smooth transitions */
+* {
+  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Force map container to always be full-size */
+#map-content {
+  flex: 1 !important;
+  height: 100% !important;
+  width: 100% !important;
+  min-height: calc(100vh - 200px) !important;
+  position: relative !important;
+}
+
+/* Ensure map graph fills container */
+#main-map {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Overlay for search results */
+#map-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  pointer-events: none !important;
+  z-index: 500 !important;
+}
+
+#map-overlay > * {
+  pointer-events: auto !important;
+}
+
+
+/* Force map to stay full-size even when analysis content is shown */
+#map-content {
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: calc(100vh - 200px) !important;
+  position: relative !important;
+}
+
+/* Ensure analysis content overlays instead of pushing map down */
+#analysis-content {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 600 !important;
+  background: var(--bg-primary) !important;
+}
+
+
+            /* Modern Theme Toggle */
+            .theme-toggle-icons {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 60px;
+                height: 30px;
+                padding: 0 8px;
+                background: var(--bg-tertiary);
+                border-radius: 15px;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .theme-toggle-icons::before {
+                content: '';
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 24px;
+                height: 24px;
+                background: var(--bg-primary);
+                border-radius: 50%;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: var(--shadow-sm);
+                z-index: 1;
+            }
+
+            .theme-toggle-icons.active::before {
+                transform: translateX(28px);
+                background: var(--accent-primary);
+            }
+
+            .theme-toggle-icons i {
+                position: relative;
+                z-index: 2;
+                transition: all 0.3s ease;
+            }
+
+            .theme-toggle-icons.active .fa-sun {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            .theme-toggle-icons.active .fa-moon {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            .theme-toggle-icons:not(.active) .fa-moon {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            .theme-toggle-icons:not(.active) .fa-sun {
+                opacity: 1;
+                transform: scale(1.1);
+            }

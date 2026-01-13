@@ -1,0 +1,85 @@
+================================================================================
+ARGO FTP DATA ANALYSIS REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Analysis Date: 2025-09-25 18:36:30
+Target: ftp.ifremer.frifremer/argo
+Estimated Total Size: 550.9 GB
+Estimated Files: 154,761
+Estimated Directories: 95,630
+Analysis Duration: 271.1 seconds
+
+DATA STATISTICS
+----------------------------------------
+Total Data Points: 26,621
+Unique File Types: 17
+Directories Scanned: 88
+Files Sampled: 385
+Estimation Accuracy: 0.2%
+
+DATA CATEGORIES BREAKDOWN
+----------------------------------------
+NetCDF Files        :        291 files (  1.1%)
+Text Data           :     33,931 files (127.5%)
+Compressed Files    :     35,400 files (133.0%)
+Metadata Files      :          1 files (  0.0%)
+Binary Files        :          0 files (  0.0%)
+Other Files         :     24,746 files ( 93.0%)
+
+FILE TYPE DETAILS
+----------------------------------------
+.gz       :     35,390 files (132.9%)
+.txt      :     22,544 files ( 84.7%)
+.png      :     14,254 files ( 53.5%)
+.csv      :     11,387 files ( 42.8%)
+.lst      :      9,739 files ( 36.6%)
+.md5      :        519 files (  1.9%)
+.nc       :        291 files (  1.1%)
+.tgz      :        168 files (  0.6%)
+.pdf      :         37 files (  0.1%)
+.docx     :         25 files (  0.1%)
+.tar      :          7 files (  0.0%)
+.zip      :          3 files (  0.0%)
+.html     :          1 files (  0.0%)
+.xls      :          1 files (  0.0%)
+.xsl      :          1 files (  0.0%)
+.xml      :          1 files (  0.0%)
+.coriolis :          1 files (  0.0%)
+
+DIRECTORY STRUCTURE
+----------------------------------------
+Maximum Depth: 4
+Depth Limit Reached: Yes
+Average Files per Directory: 1.0
+
+OPTIMIZATION METRICS
+----------------------------------------
+Sample Size per Directory: 3
+Similar Directories Skipped: 20
+Unique Patterns Detected: 67
+Performance Speed Factor: 402.0x
+Directories per Second: 0.3
+Files Sampled per Second: 1.4
+
+SMART FEATURES USED
+----------------------------------------
+✓ File extension pattern matching
+✓ Directory structure similarity detection
+✓ Numeric sequence grouping
+✓ Pattern reuse for similar directories
+✓ Statistical sampling optimization
+✓ Depth-limited traversal
+
+METHODOLOGY
+----------------------------------------
+This analysis uses smart pattern detection to estimate FTP repository size:
+1. Samples a subset of files in each directory
+2. Detects similar directory structures
+3. Reuses patterns for directories with identical layouts
+4. Groups directories with numeric sequences
+5. Limits traversal depth for efficiency
+
+NOTE: This is an ESTIMATED analysis. Actual sizes may vary.
+Pattern detection significantly reduces scanning time while maintaining accuracy.
