@@ -49,10 +49,12 @@ flowchart LR
 
 ## 📁 Project Structure
 
+```
 ARGO Ocean Data Discovery & Visualization/
 │
 ├── backend/                        # FastAPI RAG backend
 │   └── rag_service.py              # Main API service
+│
 ├── dash_frontend/                  # Frontend applications
 │   ├── research_dashboard.py       # Main interactive dashboard
 │   ├── simple_app.py               # Legacy/Simple interface
@@ -75,6 +77,7 @@ ARGO Ocean Data Discovery & Visualization/
 ├── requirements.txt                # Project dependencies
 ├── Dockerfile                      # Container configuration
 └── README.md                       # This file
+```
 ```
 
 ### Core Components
