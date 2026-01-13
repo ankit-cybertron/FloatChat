@@ -13,7 +13,7 @@ class Settings(BaseModel):
     MAX_ROWS: int = int(os.getenv("MAX_ROWS", "5000"))
     ALLOWED_FIELDS: str = os.getenv("ALLOWED_FIELDS", "temperature,salinity,pressure,latitude,longitude,datetime,float_id,platform_number")
     AUTH_TOKEN: str = os.getenv("AUTH_TOKEN", "dev-token")
-    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "API KEy")
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "YOUR API")
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 
 settings = Settings()
