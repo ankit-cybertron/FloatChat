@@ -1,7 +1,7 @@
 # ARGO Ocean Data Discovery & Visualization
 
 <p align="center">
-  <img src="ARGO Ocean Data Discovery & Visualization/output/images/Screenshot 2026-01-14 at 1.29.48 AM.png" width="800" alt="ARGO Data Visualization Demo">
+  <img src="ARGO Ocean Data Discovery & Visualization/output/images/Screenshot 2026-01-14 at 1.29.48 AM.png" width="800" >
 </p>
 
 <p align="center">
