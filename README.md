@@ -257,12 +257,12 @@ python dash_frontend/research_dashboard.py --port 8051
 
 ---
 
-## 📄 License
+## 👤 Author
 
-This project is available under the MIT License.
+**Ankit Kumar Tiwari**
+
+
 
 ---
 
-## ⚠️ Disclaimer
 
-This tool is for research and educational purposes. Data fillers used for missing values are statistically generated for testing and should be verified against official sources for publication.
