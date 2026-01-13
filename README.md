@@ -49,42 +49,44 @@ flowchart LR
 
 ## 📁 Project Structure
 
-```
 ARGO Ocean Data Discovery & Visualization/
 │
 ├── backend/                        # FastAPI RAG backend
 │   └── rag_service.py              # Main API service
 ├── dash_frontend/                  # Frontend applications
 │   ├── research_dashboard.py       # Main interactive dashboard
-│   ├── app.py                      # FloatChat interface
+│   ├── simple_app.py               # Legacy/Simple interface
 │   └── assets/                     # CSS and static assets
 │
 ├── data/                           # Data storage
 │   └── indian_ocean_floats.db      # Optimized SQLite database
 │
-├── data_processor.py               # Core processing & filtering logic
-├── setup_indian_ocean_data.py      # Database initialization script
-├── dashboard_data_integration.py   # Bridge between DB and Dashboard
-├── argo_float_rag.py               # RAG/LLM implementation
-├── ingestion.py                    # Data ingestion utilities
+├── src/                            # Core Python modules
+│   ├── data_processor.py           # Core processing & filtering logic
+│   ├── dashboard_data_integration.py # Bridge between DB and Dashboard
+│   └── argo_float_rag.py           # RAG/LLM implementation
 │
+├── scripts/                        # Utility and setup scripts
+│   ├── setup_indian_ocean_data.py  # Database initialization script
+│   └── ingest.py                   # Data ingestion utilities
+│
+├── output/                         # Generated assets (plots, reports)
+├── docs/                           # Documentation
 ├── requirements.txt                # Project dependencies
 ├── Dockerfile                      # Container configuration
-├── README.md                       # This file
-├── README_ARGO_DATA.md             # Data system documentation
-└── IMPLEMENTATION_SUMMARY.md       # Implementation details
+└── README.md                       # This file
 ```
 
 ### Core Components
 
-#### Data System (`data_processor.py`)
+#### Data System (`src/data_processor.py`)
 - **`IndianOceanArgoProcessor`**: Filters global data and creates the regional database.
 - **`IndianOceanDataAccess`**: Provides optimized query methods (spatial, temporal, parametric).
 
 #### Dashboard (`dash_frontend/`)
 - **`research_dashboard.py`**: The primary UI for researchers, featuring map views, profile analysis, and regional filtering.
 
-#### AI Assistant (`backend/` & `argo_float_rag.py`)
+#### AI Assistant (`backend/` & `src/argo_float_rag.py`)
 - **FloatChat**: A RAG-based assistant that allows users to ask questions like "Show me floats near Madagascar" and receive generated SQL or plots.
 
 ---
@@ -143,7 +145,7 @@ pip install -r requirements.txt
 ### Step 4: Initialize Data
 Run the setup script to process the data and create the local database.
 ```bash
-python setup_indian_ocean_data.py
+python scripts/setup_indian_ocean_data.py
 ```
 *Note: This will look for ARGO CSV data. You can specify a custom path using `--csv-path`.*
 
@@ -168,7 +170,7 @@ uvicorn backend.rag_service:app --reload
 
 **Terminal 2 (Frontend):**
 ```bash
-BACKEND_URL=http://localhost:8000 python dash_frontend/app.py
+BACKEND_URL=http://localhost:8000 python dash_frontend/simple_app.py
 ```
 
 ---

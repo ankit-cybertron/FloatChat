@@ -5,6 +5,9 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from backend.config import settings
 from backend.db import engine, SessionLocal
 from backend.models import Base, Float, Profile, ProfileSummary

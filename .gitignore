@@ -133,3 +133,7 @@ temp/
 # Database
 *.db
 *.sqlite
+
+#Env_file
+.env.example
+.env

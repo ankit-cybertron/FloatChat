@@ -19,7 +19,8 @@ import time
 from pathlib import Path
 
 # Add current directory to Python path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add src directory to Python path
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 
 from data_processor import IndianOceanArgoProcessor, IndianOceanDataAccess
 from dashboard_data_integration import initialize_dashboard_data, get_data_statistics

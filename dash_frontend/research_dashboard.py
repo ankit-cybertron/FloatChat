@@ -20,6 +20,7 @@ import plotly.express as px
 
 # Add parent directory to path for RAG system import
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 try:
     from argo_float_rag import process_chat_message, get_float_for_plotting, argo_rag
     RAG_AVAILABLE = True
